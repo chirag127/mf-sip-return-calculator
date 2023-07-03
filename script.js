@@ -51,7 +51,6 @@ function displaySearchResults(results) {
     });
   }
 }
-
 // Fetch mutual fund details
 function fetchMutualFundDetails(schemeCode) {
     fetch(`https://api.mfapi.in/mf/${schemeCode}`)
@@ -60,8 +59,8 @@ function fetchMutualFundDetails(schemeCode) {
         const mutualFundDetails = data;
 
         // Set default values for start and end dates
-        const endDate = mutualFundDetails.data[0].date;
-        const startDate = mutualFundDetails.data[mutualFundDetails.data.length - 1].date;
+        const endDate = convertDateFormat(mutualFundDetails.data[0].date);
+        const startDate = convertDateFormat(mutualFundDetails.data[mutualFundDetails.data.length - 1].date);
 
         // Set the default values in the date inputs
         startDateInput.value = startDate;
@@ -77,6 +76,15 @@ function fetchMutualFundDetails(schemeCode) {
       });
   }
 
+  // Convert date format from "dd-MM-yyyy" to "yyyy-MM-dd"
+  function convertDateFormat(dateString) {
+    const parts = dateString.split('-');
+    const day = parts[0];
+    const month = parts[1];
+    const year = parts[2];
+    return `${year}-${month}-${day}`;
+  }
+
   // Event listener for calculate button
   calculateButton.addEventListener('click', () => {
     const startDate = startDateInput.value;
@@ -88,6 +96,8 @@ function fetchMutualFundDetails(schemeCode) {
       resultsContainer.textContent = 'Please select both start and end dates.';
     }
   });
+
+
 
 
 
@@ -147,14 +157,42 @@ function calculateReturns(startDate, endDate) {
           return date >= new Date(startDate) && date <= new Date(endDate);
         });
 
-        // Calculate CAGR
-        const initialNav = parseFloat(filteredData[0].nav);
-        const finalNav = parseFloat(filteredData[filteredData.length - 1].nav);
-        const numberOfYears = (new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24 * 365);
-        const cagr = ((Math.pow(finalNav / initialNav, 1 / numberOfYears)) - 1) * 100;
+        // Calculate SIP returns A ssuming a fixed investment amount of 1000 rupee per installment
+        const sipReturns = filteredData.reduce((total, item) => {
+            const investment = 1000;
+            const unitsPurchased = investment / item.nav;
 
-        // Calculate absolute return
-        const absoluteReturn = ((finalNav - initialNav) / initialNav) * 100;
+            // Calculate the current value of the investment
+            const currentValue = unitsPurchased * item.nav;
+
+            // Calculate the absolute return
+
+            const absoluteReturn = currentValue - investment;
+
+            return total + absoluteReturn;
+
+        }, 0);
+
+        // Calculate CAGR
+
+        const initialInvestment = 1000 * filteredData.length;
+
+        const finalValue = initialInvestment + sipReturns;
+
+        const cagr = Math.pow((finalValue / initialInvestment), (1 / filteredData.length)) - 1;
+
+        console.log(cagr);
+
+
+        const absoluteReturn = (sipReturns / initialInvestment) * 100;
+
+        // Display the calculated returns
+
+
+
+
+
+
 
         displayReturns(cagr.toFixed(2), absoluteReturn.toFixed(2));
       })

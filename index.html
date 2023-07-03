@@ -1,30 +1,36 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>Mutual Fund Returns Calculator</title>
-  <link rel="stylesheet" type="text/css" href="styles.css">
+    <title>Mutual Fund Returns Calculator</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
+
 <body>
-  <h1>Mutual Fund Returns Calculator</h1>
+    <h1>Mutual Fund Returns Calculator</h1>
 
-  <div class="search-container">
-    <input type="text" id="search-input" placeholder="Search for mutual funds...">
-    <div id="search-results"></div>
-  </div>
-
-  <div id="mutual-fund-container">
-    <div id="fund-details"></div>
-    <div id="performance-metrics"></div>
-    <div class="date-range-container">
-      <label for="start-date">Start Date:</label>
-      <input type="date" id="start-date">
-      <label for="end-date">End Date:</label>
-      <input type="date" id="end-date">
-      <button id="calculate-button">Calculate</button>
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="Search for mutual funds...">
+        <div id="search-results"></div>
     </div>
-    <div id="results-container"></div>
-  </div>
 
-  <script src="script.js"></script>
+    <div id="mutual-fund-container">
+        <div id="fund-details"></div>
+        <div class="date-range-container">
+            <label for="start-date">Start Date:</label>
+            <input type="date" id="start-date">
+            <label for="end-date">End Date:</label>
+            <input type="date" id="end-date">
+            <button id="calculate-button">Calculate</button>
+        </div>
+        <div id="results-container">
+
+
+            <div id="performance-metrics"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
+
 </html>

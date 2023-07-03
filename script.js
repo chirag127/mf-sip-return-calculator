@@ -46,6 +46,10 @@ function displaySearchResults(results) {
       button.addEventListener('click', () => {
         selectedSchemeCode = result.schemeCode;
         fetchMutualFundDetails(selectedSchemeCode);
+
+        // Hide the search results and clear the search input
+        searchResults.innerHTML = '';
+
       });
       searchResults.appendChild(button);
     });
@@ -174,7 +178,7 @@ function calculateReturns(startDate, endDate) {
 
         // Calculate absolute return amount
 
-        const absoluteReturnAmount = totalUnits * filteredData[filteredData.length - 1].nav - totalInvestment;
+        const absoluteReturnAmount = totalUnits * filteredData[0].nav - totalInvestment;
 
         // Calculate absolute return percentage
 
@@ -182,11 +186,11 @@ function calculateReturns(startDate, endDate) {
 
         // Calculate CAGR
 
-        const cagr = Math.pow((totalUnits / (totalInvestment / 1000)), (365 / filteredData.length)) - 1;
+        const cagr  = Math.pow((totalUnits / (totalInvestment / 1000)), (365 / filteredData.length)) - 1;
 
         // Display the calculated returns
 
-        
+
 
 
 
@@ -207,10 +211,16 @@ function calculateReturns(startDate, endDate) {
   function displayReturns(cagr, absoluteReturn) {
     performanceMetricsContainer.innerHTML = `
       <h3>Performance Metrics:</h3>
-      <ul>
-        <li><strong>CAGR:</strong> ${cagr}%</li>
-        <li><strong>Absolute Return:</strong> ${absoluteReturn}%</li>
-        <!-- Add more metrics as needed -->
-      </ul>
+
+        <strong>CAGR:</strong> ${cagr}%<br>
+        <strong>Absolute Return:</strong> ${absoluteReturn}%<br>
+
+    <!-- Add more metrics<strong>Sharpe Ratio:</strong> <br>
+        <strong>Sortino Ratio:</strong> <br>
+        <strong>Alpha:</strong> <br>
+        <strong>Beta:</strong> <br>
+  -->
+
+
     `;
   }

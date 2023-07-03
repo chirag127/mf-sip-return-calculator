@@ -7,6 +7,7 @@ h1 {
     margin: 20px 0;
   }
 
+
   #search-input {
     padding: 10px;
     width: 300px;
@@ -27,7 +28,7 @@ h1 {
   }
 
   #performance-metrics {
-    text-align: left;
+    text-align: center;
   }
 
   .date-range-container {

@@ -1,0 +1,41 @@
+h1 {
+    text-align: center;
+  }
+
+  .search-container {
+    text-align: center;
+    margin: 20px 0;
+  }
+
+  #search-input {
+    padding: 10px;
+    width: 300px;
+  }
+
+  #search-results {
+    margin-top: 10px;
+    text-align: left;
+  }
+
+  #mutual-fund-container {
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  #fund-details {
+    margin-bottom: 20px;
+  }
+
+  #performance-metrics {
+    text-align: left;
+  }
+
+  .date-range-container {
+    margin: 20px 0;
+    text-align: center;
+  }
+
+  #calculate-button {
+    padding: 8px 16px;
+    margin-left: 10px;
+  }

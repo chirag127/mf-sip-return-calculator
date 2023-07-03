@@ -157,36 +157,37 @@ function calculateReturns(startDate, endDate) {
           return date >= new Date(startDate) && date <= new Date(endDate);
         });
 
-        // Calculate SIP returns A ssuming a fixed investment amount of 1000 rupee per installment
-        const sipReturns = filteredData.reduce((total, item) => {
-            const investment = 1000;
-            const unitsPurchased = investment / item.nav;
+        var totalUnits = 0;
 
-            // Calculate the current value of the investment
-            const currentValue = unitsPurchased * item.nav;
+        // Calculate total units at end date assuming a fixed investment amount of 1000 rupee per installment
+        filteredData.forEach(item => {
 
-            // Calculate the absolute return
+            totalUnits += 1000 / item.nav;
 
-            const absoluteReturn = currentValue - investment;
+        });
 
-            return total + absoluteReturn;
 
-        }, 0);
+
+        // Calculate total investment amount
+
+        const totalInvestment = filteredData.length * 1000;
+
+        // Calculate absolute return amount
+
+        const absoluteReturnAmount = totalUnits * filteredData[filteredData.length - 1].nav - totalInvestment;
+
+        // Calculate absolute return percentage
+
+        const absoluteReturn = (absoluteReturnAmount / totalInvestment) * 100;
 
         // Calculate CAGR
 
-        const initialInvestment = 1000 * filteredData.length;
-
-        const finalValue = initialInvestment + sipReturns;
-
-        const cagr = Math.pow((finalValue / initialInvestment), (1 / filteredData.length)) - 1;
-
-        console.log(cagr);
-
-
-        const absoluteReturn = (sipReturns / initialInvestment) * 100;
+        const cagr = Math.pow((totalUnits / (totalInvestment / 1000)), (365 / filteredData.length)) - 1;
 
         // Display the calculated returns
+
+        
+
 
 
 

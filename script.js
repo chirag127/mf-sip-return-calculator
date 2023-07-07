@@ -139,7 +139,7 @@ function changeDateFormat(performanceData) {
 // Filter performance data based on the selected date range,
 // start date and end date are in the format "yyyy-MM-dd"
 function filterPerformanceData(performanceData, startDate, endDate) {
-  const filteredData = performanceData.filter((item) => {
+  let filteredData = performanceData.filter((item) => {
     const date = new Date(item.date);
     // Filter the data based on the selected date range
     return date >= new Date(startDate) && date <= new Date(endDate);
@@ -215,7 +215,7 @@ function calculatedailySipReturn(startDate, endDate) {
     changeDateFormat(performanceData);
 
     // Filter performance data based on the selected date range
-    const filteredData = filterPerformanceData(
+    let filteredData = filterPerformanceData(
       performanceData,
       startDate,
       endDate
@@ -277,7 +277,7 @@ function calculateLumpsumReturn(startDate, endDate) {
     changeDateFormat(performanceData);
 
     // Filter performance data based on the selected date range
-    const filteredData = filterPerformanceData(
+    var filteredData = filterPerformanceData(
       performanceData,
       startDate,
       endDate
@@ -340,7 +340,7 @@ function calculateInvestmentOnDip(startDate, endDate) {
     changeDateFormat(performanceData);
 
     // Filter performance data based on the selected date range
-    const filteredData = filterPerformanceData(
+    let filteredData = filterPerformanceData(
       performanceData,
       startDate,
       endDate
@@ -415,7 +415,7 @@ function calculateInvestmentOnUp(startDate, endDate) {
     changeDateFormat(performanceData);
 
     // Filter performance data based on the selected date range
-    const filteredData = filterPerformanceData(
+    let filteredData = filterPerformanceData(
       performanceData,
       startDate,
       endDate

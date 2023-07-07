@@ -62,13 +62,20 @@ function fetchMutualFundDetails(schemeCode) {
       .then(data => {
         const mutualFundDetails = data;
 
-        // Set default values for start and end dates
+        // Set default values for start and end dates with format {"date":"22-05-2008","nav":"10.71360"}
         const endDate = convertDateFormat(mutualFundDetails.data[0].date);
         const startDate = convertDateFormat(mutualFundDetails.data[mutualFundDetails.data.length - 1].date);
 
         // Set the default values in the date inputs
         startDateInput.value = startDate;
+
+        // endDateInput.value =
         endDateInput.value = endDate;
+
+        // Hide the date range container
+        hideDateRangeContainer();
+
+
 
         // Display the mutual fund details and show the date range container
         displaySelectedMutualFund(mutualFundDetails);
@@ -80,27 +87,14 @@ function fetchMutualFundDetails(schemeCode) {
       });
   }
 
-  // Convert date format from "dd-MM-yyyy" to "yyyy-MM-dd"
-  function convertDateFormat(dateString) {
-    const parts = dateString.split('-');
-    const day = parts[0];
-    const month = parts[1];
-    const year = parts[2];
-    return `${year}-${month}-${day}`;
-  }
-
-  // Event listener for calculate button
-  calculateButton.addEventListener('click', () => {
-    const startDate = startDateInput.value;
-    const endDate = endDateInput.value;
-
-    if (startDate && endDate) {
-      calculateReturns(startDate, endDate);
-    } else {
-      resultsContainer.textContent = 'Please select both start and end dates.';
-    }
-  });
-
+// Convert date format from "dd-MM-yyyy" to "yyyy-MM-dd"
+function convertDateFormat(dateString) {
+  const parts = dateString.split('-');
+  const day = parts[0];
+  const month = parts[1];
+  const year = parts[2];
+  return `${year}-${month}-${day}`;
+}
 
 
 
@@ -155,11 +149,89 @@ function calculateReturns(startDate, endDate) {
       .then(data => {
         const performanceData = data.data;
 
-        // Filter performance data based on the selected date range
-        const filteredData = performanceData.filter(item => {
-          const date = new Date(item.date);
-          return date >= new Date(startDate) && date <= new Date(endDate);
+        console.log(performanceData);
+        // performanceData is an array of objects with the following structure: {"date":"22-05-2008","nav":"10.71360"},{"date":"23-05-2008","nav":"10.71360"}
+
+        // change the date format from "dd-MM-yyyy" to "yyyy-MM-dd"
+
+        performanceData.forEach(item => {
+
+          item.date = convertDateFormat(item.date);
+
         });
+
+
+
+
+        // Filter performance data based on the selected date range,
+        // start date and end date are in the format "yyyy-MM-dd"
+
+
+        const filteredData = performanceData.filter(item => {
+
+          const date = new Date(item.date);
+
+
+          // Filter the data based on the selected date range
+
+          return date >= new Date(startDate) && date <= new Date(endDate);
+
+
+        });
+
+
+
+        newDatesArray = [];
+
+        const start = new Date(startDate);
+
+        const end = new Date(endDate);
+
+        for (var d = start; d <= end; d.setDate(d.getDate() + 1)) {
+
+            newDatesArray.push(new Date(d).toISOString().slice(0, 10));
+
+        }
+
+        // Create an array of dates in the filteredData array
+
+        existingDatesArray = [];
+
+        filteredData.forEach(item => {
+
+
+            existingDatesArray.push(item.date);
+
+        });
+
+        // Find the missing dates in the selected date range
+
+        missingDatesArray = newDatesArray.filter(item => !existingDatesArray.includes(item));
+
+        // Add the missing dates in the selected date range to the filteredData array
+
+        missingDatesArray.forEach(item => {
+
+            const previousNav = filteredData[filteredData.length - 1].nav;
+
+
+            // remember to change the date format from "dd-MM-yyyy" to "yyyy-MM-dd" if you are using the API to get the data
+
+            filteredData.push({date: item, nav: previousNav});
+
+        });
+
+
+
+        // Sort the filteredData array based on date
+
+        filteredData.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        console.log(filteredData);
+
+
+
+
 
         var totalUnits = 0;
 
@@ -178,7 +250,9 @@ function calculateReturns(startDate, endDate) {
 
         // Calculate absolute return amount
 
-        const absoluteReturnAmount = totalUnits * filteredData[0].nav - totalInvestment;
+        const absoluteReturnAmount = totalUnits * filteredData[filteredData.length - 1].nav - totalInvestment;
+
+        console.log(absoluteReturnAmount);
 
         // Calculate absolute return percentage
 
